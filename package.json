@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ZyAjahT/Node-Mongo-NASA-API#readme",
   "dependencies": {
+    "axios": "^1.8.4",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "mongoose": "^8.13.2"
