@@ -4,6 +4,7 @@ var bodyParser = require("body-parser");
 const axios = require('axios');
 const path = require('path');
 const mongoose = require('mongoose');
+const nasaModel = require('./models/nasa.model');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -12,13 +13,22 @@ app.use(bodyParser.urlencoded({ encoded: false }));
 
 let apodInfo = {}; 
 
-function fetchAPOD(){
-    axios.get('https://api.nasa.gov/planetary/apod?api_key=L40qiQXxsSa63QgQ0wyRIFVGL2S7v2A2VqEmirkC')
+function formatRequest(reqTasks){
+    if (typeof reqTasks === 'Boolean') {
+        return [reqTasks];
+    } else if (Array.isArray(reqTasks)) {
+        return reqTasks;
+    } else {
+        console.warn(`Data type is not correct received type ${typeof req.body.task}. 'Please check inputs args: `, req.body.task);
+    }
+}
+
+function fetchAPOD(date){
+    axios.get(`https://api.nasa.gov/planetary/apod?api_key=L40qiQXxsSa63QgQ0wyRIFVGL2S7v2A2VqEmirkC${date ? '&date=' + date : ''}`)
     .then(function (response){
         apodInfo = response.data; 
     })
     .catch(function (error){
-        //handle error 
         console.log(error); 
     })
 }
@@ -27,6 +37,18 @@ app.get('/', async function (req, res){
     fetchAPOD(); 
     res.render('index', {apodInfo: apodInfo}); 
 })
+
+app.get('/calendar/<date>', async function (req, res){ 
+    fetchAPOD({date}); 
+    res.render('calendar',  {apodInfo: apodInfo});
+})
+
+app.post('/like', async function(req, res){
+    let imageIds = formatRequest(req.body.url); 
+    await nasaModel.find({'_id': {$in: imageIds}}).updateMany({liked: true});
+    res.redirect('/collection'); 
+})
+
 
 const uri = "mongodb+srv://zyajah:sMG840JXRNqIE0oE@cluster0.gdwizlf.mongodb.net/?appName=Cluster0";
 mongoose.connect(
