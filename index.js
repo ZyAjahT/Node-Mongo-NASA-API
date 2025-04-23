@@ -39,7 +39,7 @@ app.get('/', async function (req, res){
 })
 
 app.get('/calendar', async function (req, res){ 
-    fetchAPOD(date); 
+    fetchAPOD(); 
     res.render('calendar',  {apodInfo: apodInfo});
 })
 
