@@ -21,13 +21,38 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                     <a class="nav-link" href="/calendar">Calendar</a>
-                    <a class="nav-link" href="#">Saved & Liked Pictures</a>
+                    <a class="nav-link" href="/collection">Saved & Liked Pictures</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <%= apodInfo.title %>
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="<%= apodInfo.url %>" class="d-block mx-lg-auto img-lg" alt="Bootstrap Themes" width="700"
+                    height="500" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold lh-1 mb-3">Today's Astronomy Picture of the Day is:</h1>
+                <p class="lead">
+                <h4>
+                    <%= apodInfo.title %>
+                </h4> <br>
+                <%= apodInfo.explanation %>
+                    </p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <form action="/like" method="POST">
+                            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2" value="<%= apodInfo._id%>">Like</button>
+                        </form>
+                        <form action="/save" method="POST">
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Save</button>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 

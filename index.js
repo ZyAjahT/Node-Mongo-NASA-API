@@ -39,14 +39,30 @@ app.get('/', async function (req, res){
 })
 
 app.get('/calendar/<date>', async function (req, res){ 
-    fetchAPOD({date}); 
+    fetchAPOD(date); 
     res.render('calendar',  {apodInfo: apodInfo});
 })
 
+app.get('/collection', async function (req, res){ 
+    fetchAPOD(); 
+    res.render('collection',  {apodInfo: apodInfo});
+})
+
+
+function formatRequest(reqTasks){
+    if (typeof reqTasks === 'string') {
+        return [reqTasks];
+    } else if (Array.isArray(reqTasks)) {
+        return reqTasks;
+    } else {
+        console.warn(`Data type is not correct received type ${typeof req.body.task}. 'Please check inputs args: `, req.body.task);
+    }
+}
+
 app.post('/like', async function(req, res){
-    let imageIds = formatRequest(req.body.url); 
-    await nasaModel.find({'_id': {$in: imageIds}}).updateMany({liked: true});
-    res.redirect('/collection'); 
+    let imgIds = formatRequest(req.body.data); 
+    await nasaModel.find({'_id': {$in: imgIds}}).updateMany({liked: true})
+    res.redirect('/'); 
 })
 
 
