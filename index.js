@@ -38,7 +38,7 @@ app.get('/', async function (req, res){
     res.render('index', {apodInfo: apodInfo}); 
 })
 
-app.get('/calendar/<date>', async function (req, res){ 
+app.get('/calendar', async function (req, res){ 
     fetchAPOD(date); 
     res.render('calendar',  {apodInfo: apodInfo});
 })
